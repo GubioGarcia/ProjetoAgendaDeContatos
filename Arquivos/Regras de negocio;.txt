@@ -1,0 +1,9 @@
+Regras de negocio;
+CPF é obrigatorio e unico; tem q ser um cpf valido (11 digitos e conta matematica para verificar cpf);
+Agenda não deve permitir 2 ou mais contatos com o msm cpf;
+--nome e email são obrigatorios;
+email deve ser um email valido (ter so um @ e pelo menos 1 . após o arroba);
+Telefone obrigatorio de forma completa;
+
+Verificação no incluir, consultar e alterar;
+Incluir somente após a verificação que deverá consultar se cpf já existe;
