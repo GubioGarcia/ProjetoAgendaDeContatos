@@ -1,19 +1,25 @@
 #ifndef CONTATOCONTROLE_H
 #define CONTATOCONTROLE_H
-
 #include <IcrudContato.h>
-#include <QString>
+#include <contatopersistencia.h>
+#include <QMessageBox>
 #include <QStringList>
+#include <algorithm>
 #include <QDebug>
 
 namespace ggs {
     class ContatoControle : public ICrudContato
     {
     private:
+        ggs::ICrudContato *contatoPersistencia;
         void verificarRegrasDeNegocio(const Contato &objContato) const;
     public:
         ContatoControle();
-        virtual void incluir(const Contato &objContato) const;
+        ~ContatoControle();
+        void incluir(const Contato &objContato) const;
+        std::list<Contato> *getListaDeContatos() const;
+        Contato *consultar(QString cpf) const;
+        void excluir(QString cpf) const;
 
         bool validarCpf(const QString& cpf)const;
         bool validarEmail(const QString& email)const;

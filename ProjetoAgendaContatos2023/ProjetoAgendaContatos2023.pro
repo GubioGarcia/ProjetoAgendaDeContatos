@@ -11,6 +11,8 @@ CONFIG += c++17
 SOURCES += \
     contato.cpp \
     contatocontrole.cpp \
+    contatopersistencia.cpp \
+    endereco.cpp \
     main.cpp \
     mainwindow.cpp \
     telefone.cpp
@@ -19,6 +21,8 @@ HEADERS += \
     IcrudContato.h \
     contato.h \
     contatocontrole.h \
+    contatopersistencia.h \
+    endereco.h \
     mainwindow.h \
     telefone.h
 

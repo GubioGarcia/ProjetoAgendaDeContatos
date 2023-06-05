@@ -1,6 +1,5 @@
 #ifndef TELEFONE_H
 #define TELEFONE_H
-
 #include <QString>
 
 namespace ggs {

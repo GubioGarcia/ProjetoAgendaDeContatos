@@ -1,13 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
-#include <QMainWindow>
-#include <telefone.h>
-#include <contato.h>
 #include <contatocontrole.h>
 #include <IcrudContato.h>
+#include <contato.h>
+#include <telefone.h>
+#include <QInputDialog>
+#include <QMainWindow>
 #include <QMessageBox>
+#include <QStringList>
 #include <QDebug>
+#include <list>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,6 +23,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void mostrarContatosNaGrid(std::list<ggs::Contato> *listaDeContatos);
+    void selecaoDeItensNaTableWidget();
+    void limparInterface()const;
 private slots:
     void on_pushButtonIncluir_clicked();
 
@@ -29,6 +34,8 @@ private slots:
     void on_pushButtonExcluir_clicked();
 
     void on_pushButtonAlterar_clicked();
+
+    void on_pushButtonLimpar_clicked();
 
 private:
     Ui::MainWindow *ui;

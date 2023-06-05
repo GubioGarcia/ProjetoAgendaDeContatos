@@ -1,8 +1,60 @@
 #include "contatocontrole.h"
 
 namespace ggs {
-    ContatoControle::ContatoControle()
-    {}
+    ContatoControle::ContatoControle():
+        contatoPersistencia(0)
+    {
+        contatoPersistencia = new ggs::ContatoPersistencia();
+    }
+
+    ContatoControle::~ContatoControle(){
+        delete contatoPersistencia;
+    }
+
+    void ContatoControle::incluir(const Contato &objContato) const{
+        try {
+            verificarRegrasDeNegocio(objContato);//verificação de regras após coletar dados da ui
+            contatoPersistencia->incluir(objContato);//inclusão do contato no arquivo, a cargo da classe contatoPersistencia
+            return;
+        } catch (QString &erro) {
+            throw erro;
+        }
+    }
+
+    std::list<Contato> *ContatoControle::getListaDeContatos() const{
+        try {
+            return contatoPersistencia->getListaDeContatos();
+        } catch (QString &erro) {
+            throw erro;
+        }
+    }
+
+    Contato *ContatoControle::consultar(QString cpf) const{
+        try {
+            return contatoPersistencia->consultar(cpf);
+        } catch (QString &erro) {
+            throw erro;
+        }
+    }
+
+    void ContatoControle::excluir(QString cpf) const{
+        try {
+            return contatoPersistencia->excluir(cpf);
+        } catch (...) {
+        }
+    }
+
+    void ContatoControle::verificarRegrasDeNegocio(const Contato &objContato) const{
+        if(objContato.getCpf().isEmpty()) throw QString("ERRO: Insira CPF");
+        if(objContato.getNomeCompleto().isEmpty()) throw QString("ERRO: Insira Nome Completo");
+        if(objContato.getEmail().isEmpty()) throw QString("ERRO: Insira email válido");
+        if(objContato.obterTelefone().isEmpty()) throw QString("ERRO: Insira Telefone válido");
+
+        if(!validarCpf(objContato.getCpf())) throw QString("ERRO: CPF inválido");//Verificar se CPF é válido
+        if(!validarEmail(objContato.getEmail())) throw QString("ERRO: Email não é válido");//Verificar se email é válido
+        if(!validarFone(objContato.obterTelefone())) throw QString("ERRO: Telefone inválido");//Verificar se Telefone é válido
+        return;
+    }
 
     bool ContatoControle::validarCpf(const QString& cpf)const{
         if(cpf.size() != 11) return false;
@@ -54,26 +106,6 @@ namespace ggs {
                 if(!aux.isDigit()) return false;
             }
         }
-    }
-
-    void ContatoControle::verificarRegrasDeNegocio(const Contato &objContato) const{
-        if(objContato.getCpf().isEmpty()) throw QString("ERRO: Insira CPF");
-        if(objContato.getNomeCompleto().isEmpty()) throw QString("ERRO: Insira Nome Completo");
-        if(objContato.getEmail().isEmpty()) throw QString("ERRO: Insira email válido");
-        if(objContato.obterTelefone().isEmpty()) throw QString("ERRO: Insira Telefone válido");
-
-        if(!validarCpf(objContato.getCpf())) throw QString("ERRO: CPF inválido");//Verificar se CPF é válido
-        if(!validarEmail(objContato.getEmail())) throw QString("ERRO: Email não é válido");//Verificar se email é válido
-        if(!validarFone(objContato.obterTelefone())) throw QString("ERRO: Telefone inválido");//Verificar se Telefone é válido
-        return;
-    }
-    void ContatoControle::incluir(const Contato &objContato) const{
-        try {
-            verificarRegrasDeNegocio(objContato);
-            //mandar incluir o contato no arquivo
-            return;
-        } catch (QString &erro) {
-            throw erro;
-        }
+        return true;
     }
 }

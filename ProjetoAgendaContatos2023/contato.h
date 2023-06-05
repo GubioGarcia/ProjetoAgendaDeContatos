@@ -1,8 +1,7 @@
 #ifndef CONTATO_H
 #define CONTATO_H
-
-#include <QString>
 #include <telefone.h>
+#include <QString>
 
 namespace ggs {
     class Contato
