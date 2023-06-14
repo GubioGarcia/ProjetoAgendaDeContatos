@@ -44,15 +44,27 @@ namespace ggs {
         }
     }
 
+    void ContatoControle::alterar(const Contato &objContato) const{
+        try {
+            return contatoPersistencia->alterar(objContato);
+        } catch (...) {
+        }
+    }
+
     void ContatoControle::verificarRegrasDeNegocio(const Contato &objContato) const{
         if(objContato.getCpf().isEmpty()) throw QString("ERRO: Insira CPF");
         if(objContato.getNomeCompleto().isEmpty()) throw QString("ERRO: Insira Nome Completo");
         if(objContato.getEmail().isEmpty()) throw QString("ERRO: Insira email válido");
         if(objContato.obterTelefone().isEmpty()) throw QString("ERRO: Insira Telefone válido");
 
-        if(!validarCpf(objContato.getCpf())) throw QString("ERRO: CPF inválido");//Verificar se CPF é válido
-        if(!validarEmail(objContato.getEmail())) throw QString("ERRO: Email não é válido");//Verificar se email é válido
-        if(!validarFone(objContato.obterTelefone())) throw QString("ERRO: Telefone inválido");//Verificar se Telefone é válido
+        if(!validarCpf(objContato.getCpf())) throw QString("ERRO: CPF inválido"); // Verificar se CPF é válido
+        if(!validarEmail(objContato.getEmail())) throw QString("ERRO: Email não é válido"); // Verificar se email é válido
+        if(!validarFone(objContato.obterTelefone())) throw QString("ERRO: Telefone inválido"); // Verificar se Telefone é válido
+
+        // Verificar se Endereço é válido
+        if(objContato.getEndereco().getLogradouro().isEmpty()) throw QString("ERRO: Insira o Logradouro");
+        if(objContato.getEndereco().getNumero().isEmpty()) throw QString("ERRO: Insira o Número");
+        if(objContato.getEndereco().getCep().isEmpty()) throw QString("ERRO: Insira o CEP");
         return;
     }
 

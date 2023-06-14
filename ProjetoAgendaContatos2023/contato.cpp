@@ -5,14 +5,16 @@ namespace ggs {
         cpf(""),
         nomeCompleto(""),
         email(""),
-        fone()
+        fone(),
+        endereco()
     {}
 
-    Contato::Contato(QString &cpf, QString &nomeCompleto, QString &email, Telefone &fone):
+    Contato::Contato(QString &cpf, QString &nomeCompleto, QString &email, Telefone &fone, Endereco &endereco):
         cpf(cpf),
         nomeCompleto(nomeCompleto),
         email(email),
-        fone(fone)
+        fone(fone),
+        endereco(endereco)
     {}
 
     QString Contato::toString()const{
@@ -20,6 +22,7 @@ namespace ggs {
         saida += nomeCompleto + ";";
         saida += email + ";";
         saida += fone.toString();
+        saida += endereco.toString();
         return saida;
     }
 
@@ -27,13 +30,11 @@ namespace ggs {
         return fone.toString();
     }
 
-    QString Contato::getCpf() const
-    {
+    QString Contato::getCpf() const{
         return cpf;
     }
 
-    void Contato::setCpf(const QString &newCpf)
-    {
+    void Contato::setCpf(const QString &newCpf){
         cpf = newCpf;
     }
 
@@ -59,5 +60,13 @@ namespace ggs {
 
     void Contato::setFone(const Telefone &newFone){
         fone = newFone;
+    }
+
+    Endereco Contato::getEndereco() const{
+        return endereco;
+    }
+
+    void Contato::setEndereco(const Endereco &newEndereco){
+        endereco = newEndereco;
     }
 }

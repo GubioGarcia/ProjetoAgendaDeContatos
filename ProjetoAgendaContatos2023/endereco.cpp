@@ -1,50 +1,59 @@
 #include "endereco.h"
+
 namespace ggs{
-Endereco::Endereco():
-    logradouro(""),
-    numero(0),
-    cep(0)
+    Endereco::Endereco():
+        logradouro(""),
+        numero(""),
+        cep("")
+    {}
 
-{}
-Endereco::Endereco(QString logradouro,int numero,int cep):
-    logradouro(logradouro),numero(numero),cep(cep)
-{}
-QString Endereco::toString() const{
-    QString saida = logradouro + ";";
-    saida += QString::number(numero);
-    saida += ";";
-    saida += QString::number(cep);
-    saida += ";";
-    return saida;
+    Endereco::Endereco(QString logradouro, QString numero, QString cep):
+        logradouro(logradouro), numero(numero), cep(cep)
+    {}
 
-}
-const QString &Endereco::getLogradouro() const
-{
-    return logradouro;
-}
+    QString Endereco::toString() const{
+        QString saida = logradouro + ";";
+        saida += numero;
+        saida += ";";
+        saida += cep;
+        saida += ";";
+        return saida;
+    }
 
-void Endereco::setLogradouro(const QString &newLogradouro)
-{
-    logradouro = newLogradouro;
-}
+    QString Endereco::obterEndereco()const{
+        QString saida = logradouro + " ";
+        saida += "Nº: " + numero;
+        saida += " CEP: " + cep;
+        return saida;
+    }
 
-int Endereco::getNumero() const
-{
-    return numero;
-}
+    const QString &Endereco::getLogradouro() const
+    {
+        return logradouro;
+    }
 
-void Endereco::setNumero(int newNumero)
-{
-    numero = newNumero;
-}
+    void Endereco::setLogradouro(const QString &newLogradouro)
+    {
+        logradouro = newLogradouro;
+    }
 
-int Endereco::getCep() const
-{
-    return cep;
-}
+    QString Endereco::getNumero() const
+    {
+        return numero;
+    }
 
-void Endereco::setCep(int newCep)
-{
-    cep = newCep;
-}
+    void Endereco::setNumero(const QString &newNumero)
+    {
+        numero = newNumero;
+    }
+
+    QString Endereco::getCep() const
+    {
+        return cep;
+    }
+
+    void Endereco::setCep(const QString &newCep)
+    {
+        cep = newCep;
+    }
 }

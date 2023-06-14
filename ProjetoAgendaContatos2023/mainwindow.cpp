@@ -14,9 +14,10 @@ MainWindow::MainWindow(QWidget *parent)
     //Configurando a Grid
     ui->tableWidgetSaida->setRowCount(0);
     ui->tableWidgetSaida->setColumnWidth(0, 100);
-    ui->tableWidgetSaida->setColumnWidth(1, 210);
+    ui->tableWidgetSaida->setColumnWidth(1, 180);
     ui->tableWidgetSaida->setColumnWidth(2, 210);
-    ui->tableWidgetSaida->setColumnWidth(3, 210);
+    ui->tableWidgetSaida->setColumnWidth(3, 150);
+    ui->tableWidgetSaida->setColumnWidth(4, 210);
     try {
         mostrarContatosNaGrid(agendaDeContatosControle->getListaDeContatos());
     } catch (...) {
@@ -45,15 +46,13 @@ void MainWindow::selecaoDeItensNaTableWidget(){
             ui->lineEditCpf->setText(objContato.getCpf());
             ui->lineEditCpf->setEnabled(false);
             ui->lineEditNomeCompleto->setText(objContato.getNomeCompleto());
-            ui->lineEditNomeCompleto->setEnabled(false);
             ui->lineEditEmail->setText(objContato.getEmail());
-            ui->lineEditEmail->setEnabled(false);
             ui->lineEditDdi->setText(QString::number(objContato.getFone().getDdi()));
-            ui->lineEditDdi->setEnabled(false);
             ui->lineEditDdd->setText(QString::number(objContato.getFone().getDdd()));
-            ui->lineEditDdd->setEnabled(false);
             ui->lineEditNumero->setText(QString::number(objContato.getFone().getNumero()));
-            ui->lineEditNumero->setEnabled(false);
+            ui->lineEditLogradouro->setText(objContato.getEndereco().getLogradouro());
+            ui->lineEditNumeroEndereco->setText(objContato.getEndereco().getNumero());
+            ui->lineEditCep->setText(objContato.getEndereco().getCep());
         }
     }
 }
@@ -71,12 +70,14 @@ void MainWindow::mostrarContatosNaGrid(std::list<ggs::Contato> *listaDeContatos)
             QTableWidgetItem *itemNome = new QTableWidgetItem(objeto.getNomeCompleto());
             QTableWidgetItem *itemEmail = new QTableWidgetItem(objeto.getEmail());
             QTableWidgetItem *itemTelefone = new QTableWidgetItem(objeto.getFone().obterTelefone());
+            QTableWidgetItem *itemEndereco = new QTableWidgetItem(objeto.getEndereco().obterEndereco());
             int linha = ui->tableWidgetSaida->rowCount();
             ui->tableWidgetSaida->insertRow(linha);
-            ui->tableWidgetSaida->setItem(linha,0,itemCPF);
-            ui->tableWidgetSaida->setItem(linha,1,itemNome);
-            ui->tableWidgetSaida->setItem(linha,2,itemEmail);
-            ui->tableWidgetSaida->setItem(linha,3,itemTelefone);
+            ui->tableWidgetSaida->setItem(linha, 0, itemCPF);
+            ui->tableWidgetSaida->setItem(linha, 1, itemNome);
+            ui->tableWidgetSaida->setItem(linha, 2, itemEmail);
+            ui->tableWidgetSaida->setItem(linha, 3, itemTelefone);
+            ui->tableWidgetSaida->setItem(linha, 4, itemEndereco);
         }
     } catch (QString &erro) {
         QMessageBox::information(this,"ERRO DO SISTEMA",erro);
@@ -92,6 +93,9 @@ void MainWindow::limparInterface()const{
     ui->lineEditDdi->clear();
     ui->lineEditDdd->clear();
     ui->lineEditNumero->clear();
+    ui->lineEditLogradouro->clear();
+    ui->lineEditNumeroEndereco->clear();
+    ui->lineEditCep->clear();
 }
 
 void MainWindow::on_pushButtonIncluir_clicked()
@@ -103,9 +107,13 @@ void MainWindow::on_pushButtonIncluir_clicked()
         int ddi = ui->lineEditDdi->text().toInt();
         int ddd = ui->lineEditDdd->text().toInt();
         int numeroFone = ui->lineEditNumero->text().toInt();
+        QString logradouro = ui->lineEditLogradouro->text();
+        QString cep = ui->lineEditCep->text();
+        QString numeroEndereco = ui->lineEditNumeroEndereco->text();
 
         ggs::Telefone fone(ddi, ddd, numeroFone);
-        ggs::Contato objContato(cpf, nomeCompleto, email, fone);
+        ggs::Endereco endereco(logradouro, numeroEndereco, cep);
+        ggs::Contato objContato(cpf, nomeCompleto, email, fone, endereco);
 
         agendaDeContatosControle->incluir(objContato);
 
@@ -131,6 +139,9 @@ void MainWindow::on_pushButtonConsultar_clicked()
             ui->lineEditDdi->setText(QString::number(contatoConsulta->getFone().getDdi()));
             ui->lineEditDdd->setText(QString::number(contatoConsulta->getFone().getDdd()));
             ui->lineEditNumero->setText(QString::number(contatoConsulta->getFone().getNumero()));
+            ui->lineEditLogradouro->setText(contatoConsulta->getEndereco().getLogradouro());
+            ui->lineEditCep->setText(contatoConsulta->getEndereco().getCep());
+            ui->lineEditNumeroEndereco->setText(contatoConsulta->getEndereco().getNumero());
             delete contatoConsulta;
         } else{
             QMessageBox::information(this, "ERRO DO SISTEMA", "CPF NÃO EXISTE");
@@ -147,7 +158,7 @@ void MainWindow::on_pushButtonExcluir_clicked()
         if(cpf == "") throw QString("Selecione o contato que deseja excluir.");
         ggs::Contato *contatoExcluir = 0;
         contatoExcluir = agendaDeContatosControle->consultar(cpf);
-        QString auxContato = contatoExcluir->getCpf() + '\n' + contatoExcluir->getNomeCompleto() + '\n' + contatoExcluir->getEmail() + '\n' + contatoExcluir->getFone().obterTelefone();
+        QString auxContato = contatoExcluir->getCpf() + '\n' + contatoExcluir->getNomeCompleto() + '\n' + contatoExcluir->getEmail() + '\n' + contatoExcluir->getFone().obterTelefone() + '\n' + contatoExcluir->getEndereco().obterEndereco();
         QMessageBox::StandardButton confirmacaoDeExclusao = QMessageBox::warning(this, "EXCLUIR CONTATO", "Deseja EXCLUIR o contato permanentemente?\n\n" + auxContato, QMessageBox::Yes | QMessageBox::No);
         if (confirmacaoDeExclusao == QMessageBox::Yes) {
             agendaDeContatosControle->excluir(cpf);
@@ -156,8 +167,9 @@ void MainWindow::on_pushButtonExcluir_clicked()
         limparInterface();
         mostrarContatosNaGrid(agendaDeContatosControle->getListaDeContatos());
 
-        QMessageBox::information(this, "EXCLUIR CONTATO", "Contato encluído!");
+        ui->lineEditCpf->setEnabled(true);
 
+        QMessageBox::information(this, "EXCLUIR CONTATO", "Contato encluído!");
     } catch (QString &erro) {
         QMessageBox::information(this, "ERRO DO SISTEMA", erro);
     }
@@ -166,7 +178,29 @@ void MainWindow::on_pushButtonExcluir_clicked()
 void MainWindow::on_pushButtonAlterar_clicked()
 {
     try {
+        QString cpf = ui->lineEditCpf->text();
+        if(cpf == "") throw QString("Selecione o contato que deseja alterar.");
 
+        QString nomeCompleto = ui->lineEditNomeCompleto->text();
+        QString email = ui->lineEditEmail->text();
+        int ddi = ui->lineEditDdi->text().toInt();
+        int ddd = ui->lineEditDdd->text().toInt();
+        int numeroFone = ui->lineEditNumero->text().toInt();
+        QString logradouro = ui->lineEditLogradouro->text();
+        QString cep = ui->lineEditCep->text();
+        QString numeroEndereco = ui->lineEditNumeroEndereco->text();
+
+        ggs::Telefone fone(ddi, ddd, numeroFone);
+        ggs::Endereco endereco(logradouro, numeroEndereco, cep);
+        ggs::Contato objContato(cpf, nomeCompleto, email, fone, endereco);
+
+        agendaDeContatosControle->alterar(objContato);
+
+        limparInterface();
+        ui->lineEditCpf->setEnabled(true);
+        mostrarContatosNaGrid(agendaDeContatosControle->getListaDeContatos());
+
+        QMessageBox::information(this, "ALTERAÇÃO DE CONTATO", "Contato alterado!");
     } catch (QString &erro) {
         QMessageBox::information(this, "ERRO DO SISTEMA", erro);
     }
@@ -180,11 +214,9 @@ void MainWindow::on_pushButtonLimpar_clicked()
     ui->lineEditDdi->clear();
     ui->lineEditDdd->clear();
     ui->lineEditNumero->clear();
+    ui->lineEditLogradouro->clear();
+    ui->lineEditNumeroEndereco->clear();
+    ui->lineEditCep->clear();
 
     ui->lineEditCpf->setEnabled(true);
-    ui->lineEditNomeCompleto->setEnabled(true);
-    ui->lineEditEmail->setEnabled(true);
-    ui->lineEditDdi->setEnabled(true);
-    ui->lineEditDdd->setEnabled(true);
-    ui->lineEditNumero->setEnabled(true);
 }

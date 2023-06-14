@@ -16,6 +16,7 @@ namespace ggs {
         std::list<Contato> *getListaDeContatos() const;
         Contato *consultar(QString cpf) const;
         void excluir(QString cpf) const;
+        void alterar(const Contato &objContato) const;
     };
 }
 
