@@ -1,6 +1,6 @@
 # Gerenciador de Contatos Agenda.txt
 
-Este projeto é um exercício de estudo focado na exploração dos conceitos de Programação Orientada a Objetos (POO), incluindo Composição, Herança, Polimorfismo e o uso de classes de Interface.
+Este projeto é um exercício de estudo focado na exploração dos conceitos de Programação Orientada a Objetos (POO), incluindo Composição, Herança, Polimorfismo e o uso de classes de Interface. Também abrange um estudo introdutório da arquitetura Model-View-Controller (MVC).
 Implementado em C++ usando o framework QT Creator.
 Tem como objetivo criar e editar um arquivo .txt para armazenar e gerenciar contatos em uma agenda.
 
